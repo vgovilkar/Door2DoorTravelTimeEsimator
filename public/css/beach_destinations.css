@@ -1,0 +1,9 @@
+#map { height: 500px; }
+.toTop{
+	text-align: right;
+	padding-top: 25px;
+}
+.toTop>a{
+	color: #c4204b;
+	text-decoration: none;
+}

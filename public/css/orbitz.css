@@ -1,0 +1,40 @@
+.navbar {
+   margin-bottom: 0px;
+   border: 1px solid transparent;
+}
+
+.navbar .brand {
+  float: left;
+  padding: 15px 0 11px 16px;
+  width: 164px;
+}
+
+.navbar {
+  background-color: #002338;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #00b1ff;
+}
+.navbar-default .navbar-nav>li>a:hover {
+    color: #ffffff;
+}
+
+.button-space {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.btn-orbitz {
+    background-image: linear-gradient(#e93761,#c4204b);
+    border-color: #b12747;
+    color: #fff;
+}
+
+.btn-orbitz:hover {
+    background-image: linear-gradient(#FF517B,#DE3A65);
+    border-color: #CB4161;
+    color: #fff;
+}
