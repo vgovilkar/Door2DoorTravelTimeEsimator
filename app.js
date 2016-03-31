@@ -98,6 +98,9 @@ app.get('/flightsearch', function (req, mainresponse) {
       console.log("after")
       console.log(origairportCodes);
       console.log(destairportCodes);
+      if(origairportCodes.length == 0 || destairportCodes.length==0) {
+        next()
+      }
       var ctr=0;
       for (i=0; i<origairportCodes.length; i++) {
           traveltimegen(origin, origairportCodes[i], function(duration, destination) {
@@ -114,6 +117,9 @@ app.get('/flightsearch', function (req, mainresponse) {
       console.log("after")
       console.log(origairportCodes);
       console.log(destairportCodes);
+      if(origairportCodes.length == 0 || destairportCodes.length==0) {
+        next()
+      }
       var ctr=0;
       for (i=0; i<destairportCodes.length; i++) {
           traveltimegen(destairportCodes[i], destination, function(duration, internaldestination) {
@@ -128,23 +134,31 @@ app.get('/flightsearch', function (req, mainresponse) {
 
     var flightsearchcall = function(next) {
       var ctr=0;
+      if(origairportCodes.length == 0 || destairportCodes.length==0) {
+        var obj = {}
+        obj['airline'] = "No Results"
+        resbody.push(obj)
+        next()
+      }
       for (i=0; i<origairportCodes.length; i++) {
         for (j = 0 ; j<destairportCodes.length; j++) {
           flightsearch(next, origairportCodes[i], destairportCodes[j], departdate, function(minlegairline, minlegprice, traveltime, originiata, destiata) {
             ctr ++;
             //console.log(ctr);
             var obj = {}
-            obj['price'] = minlegprice;
-            obj['flighttime'] = Math.round( (traveltime/3600) * 10 ) / 10 + 'hrs'
-            var tt = (traveltime/60) + parseInt(origintraveltimes[originiata]) + parseInt(destinationtraveltimes[destiata])
-            obj['traveltime'] = Math.round((tt/60) * 10) / 10 + 'hrs'
-            obj['originiata'] = originiata
-            obj['destiata'] = destiata
-            obj['origtt'] = origintraveltimes[originiata]
-            obj['desttt'] = destinationtraveltimes[destiata]
-            obj['airline'] = minlegairline
+            if(minlegairline != null) {
+              obj['price'] = minlegprice;
+              obj['flighttime'] = Math.round( (traveltime/3600) * 10 ) / 10 + 'hrs'
+              var tt = (traveltime/60) + parseInt(origintraveltimes[originiata]) + parseInt(destinationtraveltimes[destiata])
+              obj['traveltime'] = Math.round((tt/60) * 10) / 10 + 'hrs'
+              obj['originiata'] = originiata
+              obj['destiata'] = destiata
+              obj['origtt'] = origintraveltimes[originiata]
+              obj['desttt'] = destinationtraveltimes[destiata]
+              obj['airline'] = minlegairline
+              resbody.push(obj)
+            }
 
-            resbody.push(obj)
             if(ctr == origairportCodes.length*destairportCodes.length) {
               next()
             }
@@ -185,7 +199,7 @@ app.get('/flightsearch', function (req, mainresponse) {
 
 });
 
-var server = app.listen(80, function () {
+var server = app.listen(3000, function () {
   var host = server.address().address;
   var port = server.address().port;
 
@@ -309,6 +323,7 @@ function flightsearch(next, originiata, destiata, departdate, callback) {
               callback(minlegairline, minlegprice, traveltime, originiata, destiata);
           }
           catch(err) {
+              callback(null, null, null, null, null);
               console.log(err)
           }
       }

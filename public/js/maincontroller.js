@@ -6,7 +6,7 @@ app.controller('MainCtrl', function ($filter, $http, $scope, $location, anchorSm
   $scope.destination = null;
   $scope.search = 'Search';
   $scope.departdate = {
-         value: new Date(2015, 12, 2)
+         value: new Date()
        };
 
   $scope.searchresults = null;
